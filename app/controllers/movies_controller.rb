@@ -19,8 +19,11 @@ class MoviesController < ApplicationController
     # Check if the user is filtering movies
     if params[:ratings].present?
       @movies = Movie.where(rating: params[:ratings].keys).order(@sortBy)
+      @selected = params[:ratings].keys
+    else
+      @selected = @all_ratings
     end
-    
+
   end
 
   def new

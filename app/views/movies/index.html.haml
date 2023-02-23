@@ -5,10 +5,8 @@
   Include:
   - @all_ratings.each do |rating|
     = rating
-    - checked = true
-    - checked = params[:ratings] && params[:ratings][rating] ? true : false if params[:ratings]
-    = check_box_tag "ratings[#{rating}]", 1, checked
-  = submit_tag 'Refresh'
+    = check_box_tag "ratings[#{rating}]", 1, @selected.include?("#{rating}")
+  = submit_tag 'Refresh', :id => 'ratings_submit'
 
 
 
