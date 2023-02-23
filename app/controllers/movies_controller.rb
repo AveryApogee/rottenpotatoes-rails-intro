@@ -18,7 +18,7 @@ class MoviesController < ApplicationController
 
     # Check if the user is filtering movies
     if params[:ratings].present?
-      @movies = Movie.where(rating: params[:ratings].keys).order(@sortBy)
+      @movies = Movie.where(rating: params[:ratings].keys).order(params[:sort])
       @selected = params[:ratings].keys
     else
       @selected = @all_ratings
