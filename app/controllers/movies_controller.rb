@@ -12,16 +12,35 @@ class MoviesController < ApplicationController
 
   def index
 
-    # Get the movies
+    # Initialize
     @all_ratings = Movie.all_ratings
-    @movies = Movie.order(params[:sort])
 
+    # Check new connection
+    if session[:rating] == nil and session[:sort] == nil
+      session[:rating] = {'G'=>1,'PG'=>1,'PG-13'=>1,'R'=>1}
+      session[:sort] = "title"
+    end
+    
     # Check if the user is filtering movies
     if params[:ratings].present?
-      @movies = Movie.where(rating: params[:ratings].keys).order(params[:sort])
       @selected = params[:ratings].keys
-    else
-      @selected = @all_ratings
+      session[:rating] = params[:ratings]
+    end
+
+    # Check if the user is sorting movies
+    if params[:sort].present?
+      session[:sort] = params[:sort]
+    end
+
+    # Filter and sort
+    @movies = Movie.where(rating: @selected).order(params[:sort])
+
+    # Reload page
+    if params[:sort] == nil or params[:ratings] == nil
+      params[:ratings] = session[:rating]
+      params[:sort] = session[:sort]
+      flash.keep
+      redirect_to movies_path(params.to_unsafe_h)
     end
 
   end
