@@ -10,9 +10,17 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  # Control sorting the movies
   def index
+
+    # Get the movies
+    @all_ratings = Movie.all_ratings
     @movies = Movie.order(params[:sort])
+
+    # Check if the user is filtering movies
+    if params[:ratings].present?
+      @movies = Movie.where(rating: params[:ratings].keys).order(@sortBy)
+    end
+    
   end
 
   def new
